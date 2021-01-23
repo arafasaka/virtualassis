@@ -6,3 +6,49 @@ body, html {height: 100%}
   background-position: center;
   background-size: cover;
 }
+
+.h1{
+  text-align: center;
+}
+
+#computer {
+  background-color:rgba(255, 255, 255, 0.048);
+  font-weight: bold;
+  color:white;
+  border: none;
+  outline:none;
+  height:80px;
+  text-align: right;
+  transition:height 1s;
+  -webkit-transition:height 1s;
+}
+#computer:focus {
+  height:50px;
+  font-size:16px;
+}
+
+#human {
+  background-color:rgba(255, 255, 255, 0.062);
+  font-weight: bold;
+  color:rgb(218, 169, 7);
+  border: none;
+  outline:none;
+  height:30px;
+  text-align: left;
+  transition:height 1s;
+  -webkit-transition:height 1s;
+
+}
+#human:focus {
+  height:50px;
+  font-size:16px;
+}
+
+div.time {
+  text-align: center;
+  font-size: 15px;
+  position: relative;
+  color: rgb(253, 253, 253);
+  letter-spacing: 2px;
+}
+

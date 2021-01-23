@@ -7,3 +7,7 @@ https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio
 pip install PyAudio
 pip install SpeechRecognition
 pip install gTTS
+pip install beautifulsoup
+pip install requests
+
+weather make free account monthly 1000.000 per month
