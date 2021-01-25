@@ -52,3 +52,10 @@ div.time {
   letter-spacing: 2px;
 }
 
+ul.b {
+  list-style-type: square;
+  text-align: justify;
+  color: rgb(0, 0, 0);
+  font-size: 9px;
+}
+

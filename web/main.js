@@ -57,6 +57,9 @@ function checkOnKeyUpNama(){
     console.log('isi nama ' + data);
 }
 
+function Helppage() {
+  window.location.href = "help.html";
+}
 
 // function ask() {
 //       eel.asking()

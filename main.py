@@ -72,7 +72,6 @@ def Asking():
                         speak(f"Sorry i couldn't find the note called {notes_term}, anything else?")
                     break
                     
-
             CHROME_STRS = ["find something"]
             for phrase in CHROME_STRS:
                 if phrase in text:
@@ -87,7 +86,6 @@ def Asking():
                         files(text)
                     except Exception as e:
                         print(e)
-                   
 
             TIME_STRS = ["what's the time", "tell me the time", "what time is it"]
             for phrase in TIME_STRS:
@@ -253,6 +251,16 @@ def Asking():
                         break
                         pass
 
+            JOKE_STRS = ["give me a joke", "something funny", "gime me some jokes"]
+            for phrase in JOKE_STRS:
+                if phrase in text:
+                    try:
+                        joke()
+                    except Exception as e:
+                        print(e)
+                        eel.computer("Sorry, i'm not in the mood")
+                        speak("Sorry, i'm not in the mood")
+
             WEATHER_STRS = ["weather like today"]
             for phrase in WEATHER_STRS:
                 if phrase in text:
@@ -339,6 +347,6 @@ def Asking():
 # passing()
 # eel.tulisan(passing.text)
 
-eel.start('index.html', size=(400,600), port=8001)
+eel.start('index.html', size=(480,600), port=8001)
 
 

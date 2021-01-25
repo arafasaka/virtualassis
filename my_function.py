@@ -6,6 +6,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import os
+import time as timeout
 from time import ctime  # get time details
 import pyttsx3
 import speech_recognition as sr
@@ -50,6 +51,9 @@ MONTHS = [
 DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 DAY_EXTENTIONS = ["rd", "th", "st", "nd"]
 
+response = requests.get("https://official-joke-api.appspot.com/random_joke")
+setup_joke = response.json()['setup']
+punchline_joke = response.json()['punchline']
 
 def speak(text):
     engine = pyttsx3.init()
@@ -145,14 +149,10 @@ def greet():
             speak(f"Good Afternoon {nama}!")
             print(f"Good Afternoon {nama}!")
             eel.computer(f"Good Afternoon {nama}!")
-        elif hour >= 16 and hour < 20:
+        else:
             speak(f"Good Evening {nama}!")
             print(f"Good Evening {nama}!")
             eel.computer(f"Good Evening {nama}!")
-        else:
-            speak(f"Good Night {nama}!")
-            print(f"Good Night {nama}!")
-            eel.computer(f"Good Night {nama}!")
     except:
         if hour >= 0 and hour <= 12:
             speak("Good Morning")
@@ -311,11 +311,11 @@ def files(text):
     filename_term = get_audio()
     eel.human(filename_term)
 
-    if files_term == "document":
+    if files_term == "document" or "word document":
         word(filename_term)
-    elif files_term == "excel document":
+    elif files_term == "excel document" or "excel":
         excel(filename_term)
-    elif files_term == "powerpoint document":
+    elif files_term == "powerpoint document" or "power point" or "powerpoint":
         ppt(filename_term)
     else:
         eel.computer("I'm, sorry i didn't get that")
@@ -328,7 +328,14 @@ def word(text):
         if filename in files:
             result.append(os.path.join(root, filename))
             os.startfile(os.path.join(root, filename))
+    if result == []:
+        speak(f"Sorry i can't find your document {nama}")
+        eel.computer(f"Sorry i can't find your document {nama}")
+        print("tidak ditemukan")
 
+    print(result)
+    eel.computer(result)
+    speak(f"I've open it for you {nama}")
 
 def excel(text):
     filename = text + ".xlsx"
@@ -337,7 +344,14 @@ def excel(text):
         if filename in files:
             result.append(os.path.join(root, filename))
             os.startfile(os.path.join(root, filename))
+    if result == []:
+        speak(f"Sorry i can't find your document {nama}")
+        eel.computer(f"Sorry i can't find your document {nama}")
+        print("tidak ditemukan")
 
+    print(result)
+    eel.computer(result)
+    speak(f"I've open it for you {nama}")
 
 def ppt(text):
     filename = text + ".pptx"
@@ -346,11 +360,14 @@ def ppt(text):
         if filename in files:
             result.append(os.path.join(root, filename))
             os.startfile(os.path.join(root, filename))
-
+    if result == []:
+        speak(f"Sorry i can't find your document {nama}")
+        eel.computer(f"Sorry i can't find your document {nama}")
+        print("tidak ditemukan")
 
     print(result)
     eel.computer(result)
-    print(filename)
+    speak(f"I've open it for you {nama}")
    
 
 def calculate(text1):
@@ -607,5 +624,14 @@ def weather(latitude, longitude):
         return x
     else:
         return False    
+
+def joke():
+    print(setup_joke)
+    eel.computer(setup_joke)
+    speak(setup_joke)
+    timeout.sleep(5)
+    print(punchline_joke)
+    eel.computer(punchline_joke)
+    speak(punchline_joke)
 
 SERVICE = authenticate_google()

@@ -9,5 +9,6 @@ pip install SpeechRecognition
 pip install gTTS
 pip install beautifulsoup
 pip install requests
+pip install googletrans
 
 weather make free account monthly 1000.000 per month
