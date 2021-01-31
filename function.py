@@ -1,20 +1,9 @@
-from __future__ import print_function
 import datetime
-import pickle
-import os.path
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
-import os
 import time as timeout
 from time import ctime  # get time details
-import pyttsx3
-import speech_recognition as sr
-import pytz
+import pytz #timezone
 import subprocess
-import logging
 import webbrowser
-import ctypes
 import config_apikey_weather
 from bs4 import BeautifulSoup #getlocation
 import requests
@@ -23,11 +12,11 @@ import operator #operator matematika
 import smtplib #system quit dll
 import wikipedia #wikpedia
 import random #mengacak data
-from urllib.request import urlopen #buka url
 import json 
 from googletrans import Translator # translator
-from gtts import gTTS #google text to speech
-import playsound #bantu dalam sound
+from urllib.request import urlopen #buka url
+from audio_handler import *
+from auth_handler import *
 
 eel.init('web')
 
@@ -55,88 +44,11 @@ response = requests.get("https://official-joke-api.appspot.com/random_joke")
 setup_joke = response.json()['setup']
 punchline_joke = response.json()['punchline']
 
-def speak(text):
-    engine = pyttsx3.init()
-    # engine.setProperty('voice', '')
-    engine.say(text)
-    engine.runAndWait()
-
-# def speak(text):
-#     tts = gTTS(text=text, lang="en")
-#     filename = "voice.mp3"
-#     tts.save(filename)
-#     playsound.playsound(filename)
-#     os.remove(filename)
-
-
-def speak_indo(text_indo):
-    tts = gTTS(text=text_indo, lang="id")
-    filename = "voice1.mp3"
-    tts.save(filename)
-    playsound.playsound(filename)
-    os.remove(filename)
-
-def speak_ja(text_ja):
-    tts = gTTS(text=text_ja, lang="ja")
-    filename = "voice2.mp3"
-    tts.save(filename)
-    playsound.playsound(filename)
-    os.remove(filename)
-
-def speak_es(text_es):
-    tts = gTTS(text=text_es, lang="es")
-    filename = "voice3.mp3"
-    tts.save(filename)
-    playsound.playsound(filename)
-    os.remove(filename)
-
-def speak_fr(text_fr):
-    tts = gTTS(text=text_fr, lang="fr")
-    filename = "voice4.mp3"
-    tts.save(filename)
-    playsound.playsound(filename)
-    os.remove(filename)
-
-def speak_hi(text_hi):
-    tts = gTTS(text=text_hi, lang="hi")
-    filename = "voice5.mp3"
-    tts.save(filename)
-    playsound.playsound(filename)
-    os.remove(filename)
-
-def speak_ar(text_ar):
-    tts = gTTS(text=text_ar, lang="ar")
-    filename = "voice6.mp3"
-    tts.save(filename)
-    playsound.playsound(filename)
-    os.remove(filename)
-
-def speak_zh(text_zh):
-    tts = gTTS(text=text_zh, lang="zh-CN")
-    filename = "voice7.mp3"
-    tts.save(filename)
-    playsound.playsound(filename)
-    os.remove(filename)
-
-def get_audio():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        audio = r.listen(source)
-        said = ""
-
-        try:
-            said = r.recognize_google(audio)
-            print(said)
-        except Exception as e:
-            print("Exception: " + str(e))
-
-    return said.lower()
 
 @eel.expose
 def nama_greet(data):
     global nama
     nama = data
-
 
 def greet():
     hour = int(datetime.datetime.now().hour)
@@ -175,28 +87,6 @@ def hello():
     except:
         eel.computer(f"How can i help you?")
         speak(f"How can i help you?")
-
-
-def authenticate_google():
-    creds = None
-    if os.path.exists("token.pickle"):
-        with open("token.pickle", "rb") as token:
-            creds = pickle.load(token)
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
-            creds = flow.run_local_server(port=0)
-
-        with open("token.pickle", "wb") as token:
-            pickle.dump(creds, token)
-
-    service = build("calendar", "v3", credentials=creds)
-
-    return service
-
 
 def get_events(day, service):
     date = datetime.datetime.combine(day, datetime.datetime.min.time())
@@ -311,63 +201,76 @@ def files(text):
     filename_term = get_audio()
     eel.human(filename_term)
 
-    if files_term == "document" or "word document":
-        word(filename_term)
-    elif files_term == "excel document" or "excel":
+    if files_term == "document" or files_term == "word document":
+        wordi(filename_term)
+    elif files_term == "excel" or files_term == "excel document":
         excel(filename_term)
-    elif files_term == "powerpoint document" or "power point" or "powerpoint":
+    elif files_term == "powerpoint" or files_term == "powerpoint document" or files_term == "power point":
         ppt(filename_term)
     else:
         eel.computer("I'm, sorry i didn't get that")
         speak("I'm, sorry i didn't get that")
         
-def word(text):
-    filename = text + ".docx"
+def word(text_word):
+    filename = text_word + ".docx"
     result = []
     for root, dir, files in os.walk("C:\\Users"):
         if filename in files:
             result.append(os.path.join(root, filename))
             os.startfile(os.path.join(root, filename))
     if result == []:
-        speak(f"Sorry i can't find your document {nama}")
-        eel.computer(f"Sorry i can't find your document {nama}")
-        print("tidak ditemukan")
+        try:
+            speak(f"Sorry i can't find your document {nama}")
+            eel.computer(f"Sorry i can't find your document {nama}")
+        except:
+            speak("Sorry i can't find your document")
+            eel.computer("Sorry i can't find your document")
+            print("tidak ditemukan exel")
+    else:
+        print(result)
+        eel.computer(result)
+        speak(f"I've open it for you {nama}")
 
-    print(result)
-    eel.computer(result)
-    speak(f"I've open it for you {nama}")
-
-def excel(text):
-    filename = text + ".xlsx"
+def excel(text_excel):
+    filename = text_excel + ".xlsx"
     result = []
     for root, dir, files in os.walk("C:\\Users"):
         if filename in files:
             result.append(os.path.join(root, filename))
             os.startfile(os.path.join(root, filename))
     if result == []:
-        speak(f"Sorry i can't find your document {nama}")
-        eel.computer(f"Sorry i can't find your document {nama}")
-        print("tidak ditemukan")
+        try:
+            speak(f"Sorry i can't find your document {nama}")
+            eel.computer(f"Sorry i can't find your document {nama}")
+        except:
+            speak("Sorry i can't find your document")
+            eel.computer("Sorry i can't find your document")
+            print("tidak ditemukan exel")
+    else:
+        print(result)
+        eel.computer(result)
+        speak(f"I've open it for you {nama}")
 
-    print(result)
-    eel.computer(result)
-    speak(f"I've open it for you {nama}")
-
-def ppt(text):
-    filename = text + ".pptx"
+def ppt(text_ppt):
+    filename = text_ppt + ".pptx"
     result = []
     for root, dir, files in os.walk("C:\\Users"):
         if filename in files:
             result.append(os.path.join(root, filename))
             os.startfile(os.path.join(root, filename))
     if result == []:
-        speak(f"Sorry i can't find your document {nama}")
-        eel.computer(f"Sorry i can't find your document {nama}")
-        print("tidak ditemukan")
+        try:
+            speak(f"Sorry i can't find your document {nama}")
+            eel.computer(f"Sorry i can't find your document {nama}")
+        except:
+            speak("Sorry i can't find your document")
+            eel.computer("Sorry i can't find your document")
+            print("tidak ditemukan exel")
 
-    print(result)
-    eel.computer(result)
-    speak(f"I've open it for you {nama}")
+    else:
+        print(result)
+        eel.computer(result)
+        speak(f"I've open it for you {nama}")
    
 
 def calculate(text1):
@@ -401,7 +304,6 @@ def search(text):
     webbrowser.get().open(url)
     eel.computer(f"Here is what I found for {search_term} on google")
     speak(f"Here is what I found for {search_term} on google")
-
 
 def youtube(text):
     search_term = text.split("youtube")[-1]
@@ -440,9 +342,9 @@ def shopee(text):
 
 def shownotes(notes_term):
     # file = open(notes_term +".txt", "r") 
-    subprocess.Popen(["notepad.exe", notes_term +".txt"])
+    #subprocess.Popen(["notepad.exe", notes_term +".txt"])
+    subprocess.Popen(["notepad.exe", os.path.expanduser('~\\Documents\\notes'+ notes_term)])
     #speak(file.read(6))
-        
 
 def notename(note_name):
     global file_name
@@ -450,20 +352,59 @@ def notename(note_name):
 
 def note(note_text):
     #file_name = note_name + ".txt"
-    with open(file_name, "w") as f:
-        f.write(note_text)
-    subprocess.Popen(["notepad.exe", file_name])
-    
+    # with open(file_name, "w") as f:
+    #     f.write(note_text)
+    notes_path = os.path.expanduser('~\\Documents\\notes')
+    if not os.path.exists(os.path.expanduser('~\\Documents\\notes')):
+        os.makedirs(notes_path)
+        with open(os.path.join(os.path.expanduser('~'),'Documents\\notes',file_name), "w") as f:
+            f.write(note_text)
+        subprocess.Popen(["notepad.exe", os.path.expanduser('~\\Documents\\notes\\'+ file_name)])
+    else:
+        with open(os.path.join(os.path.expanduser('~'),'Documents\\notes',file_name), "w") as f:
+            f.write(note_text)
+        subprocess.Popen(["notepad.exe", os.path.expanduser('~\\Documents\\notes\\'+ file_name)])
 
 def chrome(text):
-    chrome = "C:\\Users\\user\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"
-    subprocess.Popen([chrome])
+    url = "https://google.com/"
+    webbrowser.get().open(url)
 
+def wiki(text):
+    try:
+        eel.computer("Searching Wikipedia...")
+        speak("Searching Wikipedia...")
+        text = text.replace("wikipedia", "")
+        results = wikipedia.summary(text, sentences=3)
+        eel.computer("According to Wikipedia")
+        speak("According to Wikipedia")
+        eel.computer(results)
+        print(results)
+        speak(results)
+        speak("That's all i got sir")
+    except Exception as e:
+        eel.computer("Sorry i didn't get that, anything else?")
+        speak("Sorry i didn't get that, anything else?")
+        print("Exception: " + str(e))    
+
+
+def music():
+    try:
+        eel.computer("Here you go with music")
+        speak("Here you go with music")
+        music_dir = os.path.expanduser('~\\Music\\')
+        songs = os.listdir(music_dir)
+        music = random.choice(songs)
+        print(songs)
+        os.startfile(os.path.join(music_dir, music))
+    except Exception as e:
+        print(e)
+        eel.computer("Im sorry something wrong with your directory")
+        speak("Im sorry something wrong with your directory")
+        
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'}
 URL = ''
-
 
 def translateindo(text):
     try:
@@ -625,6 +566,33 @@ def weather(latitude, longitude):
     else:
         return False    
 
+def news():
+    try:
+        jsonObj = urlopen(
+        "http://newsapi.org/v2/everything?domains=detik.com&apiKey=fd7b9b4313e64abcba2426b73fcd0fe2"
+        )
+        data = json.load(jsonObj)
+        i = 1
+
+        speak_indo("ini dia berita yang dilansir dari detik.com")
+        print("""=============== DETIK  ============""" + "\n")
+        for item in data["articles"]:
+            if i == 6:
+                break
+            else:
+                eel.computer(str(i) + ". " + item["title"] + "\n")
+                print(str(i) + ". " + item["title"] + "\n")
+                # eel.computer(item["description"] + "\n")
+                print(item["description"] + "\n")
+                speak_indo(str(i) + ". ")
+                speak_indo(item["title"] + "\n")
+                i += 1
+    except Exception as e:
+        print(e)
+        eel.computer("For now i don't know sir, would you want me to open news website?")
+        speak("For now i don't know sir, would you want me to open news website?")
+
+
 def joke():
     print(setup_joke)
     eel.computer(setup_joke)
@@ -633,5 +601,3 @@ def joke():
     print(punchline_joke)
     eel.computer(punchline_joke)
     speak(punchline_joke)
-
-SERVICE = authenticate_google()

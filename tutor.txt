@@ -10,5 +10,6 @@ pip install gTTS
 pip install beautifulsoup
 pip install requests
 pip install googletrans
+https://github.com/15Dkatz/official_joke_api
 
 weather make free account monthly 1000.000 per month

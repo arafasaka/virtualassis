@@ -26,6 +26,21 @@ body, html {height: 100%}
   height:50px;
   font-size:16px;
 }
+#validate_acc {
+  background-color:rgba(255, 255, 255, 0);
+  font-weight: bold;
+  color:rgb(235, 21, 21);
+  border: none;
+  outline:none;
+  height:30px;
+  text-align: right;
+  transition:height 1s;
+  -webkit-transition:height 1s;
+}
+#validate_acc:focus {
+  height:50px;
+  font-size:10px;
+}
 
 #human {
   background-color:rgba(255, 255, 255, 0.062);

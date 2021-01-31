@@ -1,19 +1,18 @@
-from my_function import *
+from function import *
 eel.init('web')
 
 ##ASKING FUNCTION
 
 WAKE = "hello"
-THANKS = "thank you"
-NAME = "what is your name"
+THANKS = "thank you" 
+THANKS2 = "thanks" 
+NAME = "your name"
 HOW = "how are you"
+HOW2 = "what's up"
 LOVE = "love"
 SORRY = "sorry"
 HELP = "what can you do"
-
-SERVICE = authenticate_google()
-
-
+HELP2 = "you can do"
 
 @eel.expose
 def Asking():
@@ -39,6 +38,7 @@ def Asking():
                 if phrase in text:
                     date = get_date(text)
                     if date:
+                        SERVICE = authenticate_google()
                         get_events(date, SERVICE)
                     else:
                         eel.computer("I don't understand")
@@ -87,7 +87,7 @@ def Asking():
                     except Exception as e:
                         print(e)
 
-            TIME_STRS = ["what's the time", "tell me the time", "what time is it"]
+            TIME_STRS = ["what's the time", "tell me the time", "time is it", "what tell me the time"]
             for phrase in TIME_STRS:
                 if phrase in text:
                     time()
@@ -164,32 +164,12 @@ def Asking():
             WIKI_STRS = ["wikipedia"]
             for phrase in WIKI_STRS:
                 if phrase in text:
-                    try:
-                        eel.computer("Searching Wikipedia...")
-                        speak("Searching Wikipedia...")
-                        text = text.replace("wikipedia", "")
-                        results = wikipedia.summary(text, sentences=3)
-                        eel.computer("According to Wikipedia")
-                        speak("According to Wikipedia")
-                        eel.computer(results)
-                        print(results)
-                        speak(results)
-                        speak("That's all i got sir")
-                    except Exception as e:
-                        eel.computer("Sorry i didn't get that, anything else?")
-                        speak("Sorry i didn't get that, anything else?")
-                        print("Exception: " + str(e))
+                    wiki(text)
 
             MUSIC_STRS = ["play music", "give my mood back", "play some music"]
             for phrase in MUSIC_STRS:
                 if phrase in text:
-                    eel.computer("Here you go with music")
-                    speak("Here you go with music")
-                    # music_dir = "G:\\Song"
-                    music_dir = "C:\\Users\\User\\Music\\music\\"
-                    songs = os.listdir(music_dir)
-                    print(songs)
-                    random = os.startfile(os.path.join(music_dir, songs[1]))
+                    music()
 
             TRANS_STRS = ["translate to indonesian"]
             for phrase in TRANS_STRS:
@@ -226,7 +206,7 @@ def Asking():
                 if phrase in text:
                         translatear(text)
 
-            POWERLOCK_STRS = ["lock window"]
+            POWERLOCK_STRS = ["lock window" "lock the window"]
             for phrase in POWERLOCK_STRS:
                 if phrase in text:
                     try:
@@ -273,80 +253,47 @@ def Asking():
                         speak("Sorry, I can't get the detail right now")
                         break
 
-
-            NEWS_STRS = [
-                "what's the news today",
-                "news of the day",
-                "give me some news",
-                "news today",
-            ]
+            NEWS_STRS = ["what's the news today","news of the day","give me some news"]
             for phrase in NEWS_STRS:
                 if phrase in text:
-                    try:
-                        jsonObj = urlopen(
-                            "http://newsapi.org/v2/everything?domains=detik.com&apiKey=fd7b9b4313e64abcba2426b73fcd0fe2"
-                        )
-                        data = json.load(jsonObj)
-                        i = 1
+                    news()
 
-                        speak_indo("ini dia berita yang dilansir dari detik.com")
-                        print("""=============== DETIK  ============""" + "\n")
-                        for item in data["articles"]:
-                            if i == 6:
-                                pass
-                            else:
-                                eel.computer(str(i) + ". " + item["title"] + "\n")
-                                print(str(i) + ". " + item["title"] + "\n")
-                                # eel.computer(item["description"] + "\n")
-                                print(item["description"] + "\n")
-                                speak_indo(str(i) + ". ")
-                                speak_indo(item["title"] + "\n")
-                                i += 1
-                    except Exception as e:
-                        print(str(e))
-                    break
 
-        elif text.count(THANKS):
+        elif text == THANKS or text == THANKS2:
             eel.computer("as you wish")
             speak("as you wish")
 
-        elif text.count(NAME):
+        elif text == NAME:
             eel.computer("You can call me jarvis, mr. ara gave me that name")
             speak("You can call me jarvis, mr. ara gave me that name")
 
-        elif text.count(HOW):
+        elif text == HOW or text == HOW2:
             eel.computer("Im fine, how about you sir?")
-            speak("Im fine, how about you sir?")
-            
+            speak("Im fine, how about you sir?")    
 
-        elif text.count(LOVE):
+        elif text == LOVE:
             eel.computer("You now i dont have heart sir, dont test me")
             speak("You now i dont have heart sir, dont test me")
             
-        elif text.count(SORRY):
+        elif text == SORRY:
             eel.computer("it's okay, im here for you")
             speak("it's okay, i'm here for you")
             
-        elif text.count(HELP):
+        elif text == HELP or text == HELP2:
             eel.computer("i can do anything. Just say the keyword")
             speak("i can do anything. Just say the keyword")
             
+            eel.computer("would you like me to open the tutorial how to command me?")
+            speak("would you like me to open the tutorial how to command me?")
+            text = get_audio()
+            eel.human(text)
 
-
-# @eel.expose
-# def bismillah():
-#     bismillah.text = "lala"
-
-# bismillah()
-# eel.tulisan(bismillah.text)
-
-# def passing():
-#     Asking()
-#     passing.text = tulisan(Asking.calc)
-
-# passing()
-# eel.tulisan(passing.text)
-
+            HELP_STRS = ["sure", "yes please", "go ahead"]
+            for phrase in HELP_STRS:
+                if phrase in text:
+                    print("open")
+            
 eel.start('index.html', size=(480,600), port=8001)
+
 
 

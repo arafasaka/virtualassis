@@ -42,6 +42,15 @@ function computer(text){
   console.log("Hello from computer" + text);
 }
 
+//JAWABAN DARI PROGRAM SIGN OUT
+eel.expose(validate_acc)
+function validate_acc(text){
+  var output = document.getElementById("validate_acc").value = text;
+  output.innerHTML = text
+  console.log("Hello from signout" + text);
+}
+
+
 //JAWABAN DARI PENGGUNA
 eel.expose(human)
 function human(text){
@@ -59,6 +68,15 @@ function checkOnKeyUpNama(){
 
 function Helppage() {
   window.location.href = "help.html";
+}
+
+//SIGN OUT
+function signout() {
+  if (confirm("Signing out from your account?")) {
+    eel.delete_token()
+  } 
+  
+
 }
 
 // function ask() {
