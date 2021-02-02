@@ -3,7 +3,7 @@ eel.init('web')
 
 ##ASKING FUNCTION
 
-WAKE = "hello"
+WAKE = "diana"
 THANKS = "thank you" 
 THANKS2 = "thanks" 
 NAME = "your name"
@@ -56,21 +56,20 @@ def Asking():
                     speak("What would you like me to write down?")
                     note_text = get_audio()
                     note(note_text)
-                    eel.computer("I've made a note of that.")
-                    speak("I've made a note of that.")
+                    try:
+                        eel.computer(f"I've made a note of that {nama}.")
+                        speak(f"I've made a note of that {nama}.")
+                    except:
+                        eel.computer(f"I've made a note of that.")
+                        speak(f"I've made a note of that.")
 
-            SHOWNOTE_STRS = ["check my notes", "open my notes", "check my note"]
+            SHOWNOTE_STRS = ["my notes"]
             for phrase in SHOWNOTE_STRS:
                 if phrase in text:
                     try:
-                        eel.computer("What notes would you like to open?")
-                        speak("What notes would you like to open?")
-                        notes_term = get_audio()
-                        shownotes(notes_term)
+                        shownotes()
                     except Exception as e:
-                        eel.computer(f"Sorry i couldn't find the note called {notes_term}, anything else?")
-                        speak(f"Sorry i couldn't find the note called {notes_term}, anything else?")
-                    break
+                        print(e)
                     
             CHROME_STRS = ["find something"]
             for phrase in CHROME_STRS:
@@ -264,8 +263,8 @@ def Asking():
             speak("as you wish")
 
         elif text == NAME:
-            eel.computer("You can call me jarvis, mr. ara gave me that name")
-            speak("You can call me jarvis, mr. ara gave me that name")
+            eel.computer("My name is diana, mr. ara gave me that name")
+            speak("My name is diana, mr. ara gave me that name")
 
         elif text == HOW or text == HOW2:
             eel.computer("Im fine, how about you sir?")
@@ -291,7 +290,14 @@ def Asking():
             HELP_STRS = ["sure", "yes please", "go ahead"]
             for phrase in HELP_STRS:
                 if phrase in text:
-                    print("open")
+                    url = "https://drive.google.com/file/d/1pq2YT8OJO_nSK_D2RcvpZvtLM0BbymhN/view?usp=sharing"
+                    webbrowser.get().open(url)
+                    try:
+                        eel.computer(f"I've opened for you {nama}, please read carefully ")
+                        speak(f"I've opened for you {nama}, please read carefully")
+                    except:
+                        eel.computer("I've opened for you, please read carefully")
+                        speak("I've opened for you, please read carefully")   
             
 eel.start('index.html', size=(480,600), port=8001)
 

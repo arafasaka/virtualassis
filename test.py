@@ -11,12 +11,13 @@ folder = "web"
 #     print("yes")
 # else: 
 #     print("no")
-
-lala = os.path.expanduser('~\\Documents\\notes')
-if not os.path.exists(os.path.expanduser('~\\Documents\\notes')):
-    os.makedirs(lala)
-else:
-    print("You already have")
+path = os.path.expanduser('~\\Documents\\notes')
+subprocess.Popen(f'explorer {os.path.realpath(path)}')
+# lala = os.path.expanduser('~\\Documents\\notes')
+# if not os.path.exists(os.path.expanduser('~\\Documents\\notes')):
+#     os.makedirs(lala)
+# else:
+#     print("You already have")
 
 # completeName = "bimillah.txt"
 # with open(os.path.join(os.path.expanduser('~'),'Documents',completeName), "w") as f:

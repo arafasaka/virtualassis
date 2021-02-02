@@ -196,23 +196,25 @@ def files(text):
     files_term = get_audio()
     eel.human(files_term)
 
+    if files_term == "document" or files_term == "word document":
+        word()
+    elif files_term == "excel" or files_term == "excel document":
+        excel()
+    elif files_term == "powerpoint" or files_term == "powerpoint document" or files_term == "power point":
+        ppt()
+    else:
+        eel.computer("I'm, sorry i didn't get that, please say it very well")
+        speak("I'm, sorry i didn't get that, please say it very well")
+
+
+        
+def word():
     eel.computer("could you please tell me the name of the file?")
     speak("could you please tell me the name of the file?")
     filename_term = get_audio()
     eel.human(filename_term)
 
-    if files_term == "document" or files_term == "word document":
-        wordi(filename_term)
-    elif files_term == "excel" or files_term == "excel document":
-        excel(filename_term)
-    elif files_term == "powerpoint" or files_term == "powerpoint document" or files_term == "power point":
-        ppt(filename_term)
-    else:
-        eel.computer("I'm, sorry i didn't get that")
-        speak("I'm, sorry i didn't get that")
-        
-def word(text_word):
-    filename = text_word + ".docx"
+    filename = filename_term + ".docx"
     result = []
     for root, dir, files in os.walk("C:\\Users"):
         if filename in files:
@@ -231,8 +233,13 @@ def word(text_word):
         eel.computer(result)
         speak(f"I've open it for you {nama}")
 
-def excel(text_excel):
-    filename = text_excel + ".xlsx"
+def excel():
+    eel.computer("could you please tell me the name of the file?")
+    speak("could you please tell me the name of the file?")
+    filename_term = get_audio()
+    eel.human(filename_term)
+
+    filename = filename_term + ".xlsx"
     result = []
     for root, dir, files in os.walk("C:\\Users"):
         if filename in files:
@@ -251,8 +258,13 @@ def excel(text_excel):
         eel.computer(result)
         speak(f"I've open it for you {nama}")
 
-def ppt(text_ppt):
-    filename = text_ppt + ".pptx"
+def ppt():
+    eel.computer("could you please tell me the name of the file?")
+    speak("could you please tell me the name of the file?")
+    filename_term = get_audio()
+    eel.human(filename_term)
+
+    filename = filename_term + ".pptx"
     result = []
     for root, dir, files in os.walk("C:\\Users"):
         if filename in files:
@@ -340,20 +352,50 @@ def shopee(text):
     eel.computer(f"Here is what I found for {search_term} on shopee")
     speak(f"Here is what I found for {search_term} on shopee")
 
-def shownotes(notes_term):
-    # file = open(notes_term +".txt", "r") 
-    #subprocess.Popen(["notepad.exe", notes_term +".txt"])
-    subprocess.Popen(["notepad.exe", os.path.expanduser('~\\Documents\\notes'+ notes_term)])
-    #speak(file.read(6))
+def shownotes():
+    eel.computer(f"Would you like me to open the folder or the notes {nama}?")
+    speak(f"Would you like me to open the folder or the notes {nama}?")
+    shownotes_ans = get_audio()
+    eel.human(shownotes_ans)
+    if shownotes_ans == "the folder" or shownotes_ans == "folder":
+        path = os.path.expanduser('~\\Documents\\notes')
+        subprocess.Popen(f'explorer {os.path.realpath(path)}')
+        try:
+            eel.computer(f"I've opened it for you {nama}")
+            speak(f"I've opened it for you {nama}")
+        except:
+            eel.computer(f"I've opened it for you")
+            speak(f"I've opened it for you")
+    elif shownotes_ans == "the notes" or shownotes_ans == "notes" or shownotes_ans == "note" or shownotes_ans == "the note":
+        try:
+            eel.computer("What notes would you like to open?")
+            speak("What notes would you like to open?")
+            notes_term = get_audio()
+            eel.human(notes_term)
+            if not os.path.exists(os.path.expanduser(f'~\\Documents\\notes\\{notes_term}')):
+                eel.computer(f"Sorry i couldn't find the note called {notes_term}, anything else?")
+                speak(f"Sorry i couldn't find the note called {notes_term}, anything else?")
+            else:
+                subprocess.Popen(["notepad.exe", os.path.expanduser('~\\Documents\\notes\\'+ notes_term)])
+                try:
+                    eel.computer(f"I've opened it for you {nama}")
+                    speak(f"I've opened it for you {nama}")
+                except:
+                    eel.computer(f"I've opened it for you")
+                    speak(f"I've opened it for you")
+        except:
+            eel.computer(f"Sorry i couldn't find the note called {notes_term}, anything else?")
+            speak(f"Sorry i couldn't find the note called {notes_term}, anything else?")
+
+    else:
+        eel.computer("Sorry i didn't get that")
+        speak("Sorry i didn't get that")
 
 def notename(note_name):
     global file_name
     file_name = note_name + ".txt"
 
 def note(note_text):
-    #file_name = note_name + ".txt"
-    # with open(file_name, "w") as f:
-    #     f.write(note_text)
     notes_path = os.path.expanduser('~\\Documents\\notes')
     if not os.path.exists(os.path.expanduser('~\\Documents\\notes')):
         os.makedirs(notes_path)
